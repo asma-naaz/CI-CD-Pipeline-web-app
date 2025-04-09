@@ -22,9 +22,8 @@ to build the project
 * sudo mv build/* /opt/deployment/react/
 * ls /opt/deployment/react
 
-# strp-2
+# step-2 to deploy the project with pm2
 
-to deploy the project with pm2
 * sudo npm install -g pm2
 
 "Create an ecosystem file with PM2 to serve static files."
@@ -38,9 +37,8 @@ pm2 status
 pm2 startup
 pm2 save
 
-# step-3
+# step-3 serve the project with Nginx Proxy
 
-serve the project with Nginx Proxy
 * sudo apt update
 * sudo apt install nginx -y
 * sudo systemctl start nginx
@@ -80,8 +78,7 @@ setup UFW (firewall rules)
 # final test 
 Access http://13.233.247.140:3000/ in the browser. The React Todo App should be served successfully.
 
-# setup-4
-a jenkins for CI-CD pipeline
+# setup-4 a jenkins for CI-CD pipeline
 
 * sudo apt update -y
 * sudo apt install openjdk-21-jdk -y
