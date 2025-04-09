@@ -1,0 +1,88 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_REPO = 'https://github.com/kabirbaidhya/react-todo-app.git'
+        CHECKOUT_DIR = '/opt/checkout/react-todo-add'
+        DEPLOY_DIR = '/opt/deployment/react'
+        S3_BUCKET = 'awsdevopss3bucket'
+        AWS_ACCESS_KEY_ID = credentials('aws-s3-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-s3-secret-access-key')
+    }
+
+    stages {
+        stage('Stop Running Deployment') {
+            steps {
+                script {
+                    sh 'pm2 stop all || true'
+                }
+            }
+        }
+
+        stage('Clone Fresh Code') {
+            steps {
+                script {
+                    sh """
+                        if [ -d "${CHECKOUT_DIR}" ]; then
+                            rm -rf ${CHECKOUT_DIR}
+                        fi
+                        git clone ${GIT_REPO} ${CHECKOUT_DIR}
+                    """
+                }
+            }
+        }
+
+        stage('Install Dependencies and Build') {
+            steps {
+                script {
+                    sh """
+                        cd ${CHECKOUT_DIR}
+                        npm install
+                        npm run build
+                    """
+                }
+            }
+        }
+
+        stage('Move Build to Deployment Directory') {
+            steps {
+                script {
+                    sh """
+                        mkdir -p ${DEPLOY_DIR}
+                        cp -r ${CHECKOUT_DIR}/build ${DEPLOY_DIR}
+                    """
+                }
+            }
+        }
+
+        stage('Deploy using pm2') {
+            steps {
+                script {
+                    sh """
+                        cd ${DEPLOY_DIR}
+                        pm2 start npm --name "react-todo-app" -- start
+                    """
+                }
+            }
+        }
+
+        stage('Upload Build to S3') {
+            steps {
+                script {
+                    sh """
+                        aws s3 cp ${DEPLOY_DIR}/build s3://${S3_BUCKET}/react-todo-app/ --recursive --region ap-south-1
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo ' Deployment successful!'
+        }
+        failure {
+            echo ' Deployment failed.'
+        }
+    }
+}
