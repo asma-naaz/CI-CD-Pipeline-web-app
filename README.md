@@ -117,6 +117,8 @@ Now we will change the port to create containers because port 3000 is already be
 * nano docker-compose.yml
 * docker-compose up -d
 
+![Screenshot 2025-04-09 233245](https://github.com/user-attachments/assets/a5b31fa1-ab93-4567-87ec-a7900ffb595a)
+
 # Now our application is also accessible on port 3001.
 
 # NOTE : 
