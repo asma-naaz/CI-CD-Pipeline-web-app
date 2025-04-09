@@ -119,6 +119,10 @@ Now we will change the port to create containers because port 3000 is already be
 
 # Now our application is also accessible on port 3001.
 
+#NOTE : 
+# Configured a GitHub webhook to trigger the Jenkins pipeline automatically on every code commit.
+# Used AWS S3 to upload and store the React app build files for deployment.
+
 # Benefits of the Project:
 
 1. Containerized Application:
@@ -149,8 +153,15 @@ containers on the host.
 The project is well-suited for CI/CD pipelines due to its containerized nature. Automates build, deployment, and testing processes, reducing manual
 intervention.
 
-#NOTE : 
-✅ Configured a GitHub webhook to trigger the Jenkins pipeline automatically on every code commit.
+
+
+
+
+
+
+
+
+
 
 
 
